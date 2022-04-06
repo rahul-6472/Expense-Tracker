@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+
+    <style>
+      #expense-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      #expense-box #form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 300px;
+        height: 300px;
+        box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+      }
+
+      #form label {
+        font-size: 1rem;
+        margin: 10px 0;
+      }
+
+      #expense-box h1 {
+        color: blue;
+        text-decoration: underline;
+      }
+
+      #form input {
+        outline: none;
+        padding: 0.5rem 1rem;
+        width: 75%;
+        border-radius: 3px;
+        /* border:none; */
+      }
+
+      #month {
+        padding: 0.5rem 1rem;
+        width: 85%;
+        border-radius: 3px;
+        /* border:none; */
+        outline: none;
+      }
+
+      #submit {
+        margin-top: 15px;
+        padding: 0.5rem 1rem;
+        width: 90%;
+        color: #fff;
+        font-size: 1.2rem;
+        background-color: blue;
+        border-radius: 20px;
+      }
+      #container {
+        margin-top: 30px;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(1, auto);
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      #container > div {
+        width: 200px;
+        height: 200px;
+        box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        background: #fff;
+      }
+
+      h1 {
+        color: cadetblue;
+      }
+      #container > div p {
+        color: green;
+      }
+
+      #container > div > p + p {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="expense-box">
+      <h1>EXPENSE TRACKER</h1>
+      <div id="form">
+        <label>Select Month</label>
+        <select id="month">
+          <option value="January">January</option>
+          <option value="February">February</option>
+          <option value="March">March</option>
+          <option value="April">April</option>
+          <option value="May">May</option>
+          <option value="June">June</option>
+          <option value="July">July</option>
+          <option value="August">August</option>
+          <option value="September">September</option>
+          <option value="October">October</option>
+          <option value="November">November</option>
+          <option value="December">December</option>
+        </select>
+
+        <label>Income</label>
+        <input
+          type="text"
+          id="income"
+          placeholder="enter income in Rs"
+          autocomplete="off"
+        />
+
+        <label>Expense</label>
+        <input
+          type="text"
+          id="expense"
+          placeholder="enter expense in Rs"
+          autocomplete="off"
+        />
+
+        <button id="submit">submit</button>
+      </div>
+    </div>
+    <div id="container"></div>
+
+    <script type="text/javascript">
+      document.getElementById("submit").addEventListener("click", inputData);
+
+      let incomeData = JSON.parse(localStorage.getItem("incomeData"));
+      let TrackerData
+      if (incomeData == null) {
+        TrackerData = [];
+      } else {
+        TrackerData = JSON.parse(localStorage.getItem("incomeData"))
+        displayData(TrackerData)
+      }
+
+     
+
+      function inputData() {
+        let dataObj = {
+          month: document.getElementById("month").value,
+          income: document.getElementById("income").value,
+          expense: document.getElementById("expense").value,
+        };
+
+        TrackerData.push(dataObj);
+        localStorage.setItem("incomeData", JSON.stringify(TrackerData));
+        displayData(TrackerData);
+      }
+
+      function displayData(TrackerData) {
+        document.getElementById("container").innerText = "";
+        TrackerData.forEach((data) => {
+          let card = document.createElement("div");
+
+          let heading = document.createElement("h1");
+          heading.textContent = data.month;
+
+          let income = document.createElement("p");
+          income.textContent = "your income is " + " " + data.income;
+
+          let expenses = document.createElement("p");
+          expenses.textContent = "your expense is" + " " + data.expense;
+
+          let savings = document.createElement("p");
+          savings.textContent =
+            "your savings is" + " " + (data.income - data.expense);
+
+          card.append(heading, income, expenses, savings);
+          document.getElementById("container").append(card);
+        });
+      }
+    </script>
+  </body>
+</html>
